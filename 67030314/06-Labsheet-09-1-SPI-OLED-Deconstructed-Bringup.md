@@ -442,3 +442,12 @@ for (int i = 0; i < 16; i++) {
 
 3. เหตุใดการแก้ไขพิกัด $(x, y)$ บน `s_oled_buffer` จึงไม่ทำให้ภาพบนหน้าจอจริงเปลี่ยนทันที จนกว่าจะมีการเรียกคำสั่ง `oled_flush()`?
 ตอบ เพราะ s_oled_buffer เป็นแค่ RAM ในตัว ESP32 การแก้พิกัดเป็นการเขียนหน่วยความจำในชิปเท่านั้น ยังไม่ได้ส่งออกทางสาย SPI จนกว่าจะเรียก oled_flush() ซึ่งเป็นจุดเดียวที่ยิงข้อมูลจริงขึ้นจอ
+
+<img width="421" height="390" alt="image" src="https://github.com/user-attachments/assets/eccf5fac-9651-4b0c-b3da-10b111021e1d" />
+
+<img width="2268" height="4032" alt="image" src="https://github.com/user-attachments/assets/5d627454-33fb-4ca5-a279-e1de18eb370c" />
+
+<img width="2268" height="4032" alt="image" src="https://github.com/user-attachments/assets/cb4bb1c7-a162-4251-a3e8-7e931b59f36a" />
+
+<img width="1080" height="1440" alt="image" src="https://github.com/user-attachments/assets/76f1d49b-2e98-4263-a3da-1adcafc183c3" />
+
