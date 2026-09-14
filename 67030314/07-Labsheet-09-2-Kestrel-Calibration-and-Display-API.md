@@ -381,8 +381,12 @@ Server: Kestrel
 
 ## 5. คำถามท้ายการทดลองเพื่อการประเมินผล
 1. เหตุใดการคำนวณสเกลเซนเซอร์จึงควรทำที่ฝั่ง Kestrel Server แทนที่จะคำนวณบนไมโครคอนโทรลเลอร์ ESP32 ตั้งแต่แรก?
-2. จากการทำ HTTP Forensics หากไม่มีการตรวจสอบเงื่อนไข `RawMax <= RawMin` ในโค้ด จะเกิด Exception ชนิดใดขึ้นในภาษา C# และส่งผลต่อการทำงานของเซิร์ฟเวอร์อย่างไร?
-3. อธิบายสาเหตุทางเทคนิคว่าทำไมคำขอ HTTP POST ที่ไม่มี Header `Content-Type: application/json` จึงถูกปฏิเสธด้วยรหัสสถานะ `415 Unsupported Media Type`?
+ตอบ เพราะแยกงานตามความถนัด เนื่องจาก ESP32 มี CPU/RAM จำกัด เหมาะกับงาน real-time ใกล้ฮาร์ดแวร์ ส่วน Kestrel server มี floating-point แม่นยำกว่าและแก้ logic การคำนวณได้โดยไม่ต้อง flash เฟิร์มแวร์ใหม่ทุกครั้ง
 
+2. จากการทำ HTTP Forensics หากไม่มีการตรวจสอบเงื่อนไข `RawMax <= RawMin` ในโค้ด จะเกิด Exception ชนิดใดขึ้นในภาษา C# และส่งผลต่อการทำงานของเซิร์ฟเวอร์อย่างไร?
+ตอบ จะเกิดการหารด้วยศูนย์ (RawMax - RawMin = 0) แต่เพราะเป็น double ใน C# จึงไม่ throw exception ทันที กลับได้ค่า NaN/Infinity กระจายไปใน response แทน — server ไม่ล่มแต่ข้อมูลเสียหายแบบเงียบๆ ซึ่งตรวจจับยากกว่า exception
+
+3. อธิบายสาเหตุทางเทคนิคว่าทำไมคำขอ HTTP POST ที่ไม่มี Header `Content-Type: application/json` จึงถูกปฏิเสธด้วยรหัสสถานะ `415 Unsupported Media Type`?
+ตอบ เพราะ Minimal API ของ ASP.NET Core ต้องรู้ก่อนว่า body ที่ส่งมาคือรูปแบบใดจึงจะ deserialize เป็น object ได้ถูกต้อง ถ้าไม่มี header นี้ server จะไม่ทราบว่าต้องแปลง body เป็น JSON จึงปฏิเสธด้วย 415 แทนที่จะเดาและเสี่ยง parse ผิด
 
 
